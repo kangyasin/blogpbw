@@ -86,9 +86,14 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Blog $blog)
+    public function update(Request $request, $id)
     {
-        //
+        $blog = Blog::find($id);
+        $blog->judul = $request->get('judul');
+        $blog->artikel = $request->get('artikel');
+        $blog->update();
+        return redirect('admin/blog')
+        ->with('success', 'Information has been updated');
     }
 
     /**
@@ -97,8 +102,20 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Blog $blog)
+    public function destroy($id)
     {
-        //
+        $blog = Blog::find($id);
+        $blog->delete();
+        return redirect('admin/blog')
+        ->with('success', 'Information has been deleted');
     }
+
+    public function edit_blog($id){
+      $blog = Blog::find($id);
+      return view('blog/edit', compact('blog', 'id'));
+    }
+
+
+
+
 }
