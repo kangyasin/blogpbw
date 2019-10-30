@@ -32,7 +32,10 @@
           <div class="row">
             <div class="col-md-4"></div>
             <div class="form-group col-md-4">
-              <label for="Gambar">Gambar :</label>
+              <label for="Gambar">Gambar :</label><br/>
+              @if($blog->gambar != '')
+                <img src="{{ url('/images/'.$blog->gambar) }}" alt="{{ $blog->judul }}" width="100" style="margin-bottom:20px;">
+              @endif
               <input type="file" name="filename">
             </div>
           </div>

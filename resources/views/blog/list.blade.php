@@ -4,7 +4,7 @@
   <div class="row justify-content-center">
 
     <div class="right">
-      <a href="{{ url('admin/add_blog') }}" class="btn btn-primary"> Add New Blog </a>
+      <a href="{{ url('admin/add_blog') }}" class="btn btn-primary" style="margin-bottom:20px; float:right;"> Add New Blog </a>
     </div>
 
     <div class="col-md-12">

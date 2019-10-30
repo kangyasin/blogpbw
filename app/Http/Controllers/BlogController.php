@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Blog;
 use Illuminate\Http\Request;
-
+use File;
 class BlogController extends Controller
 {
     /**
@@ -88,10 +88,30 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+
         $blog = Blog::find($id);
         $blog->judul = $request->get('judul');
         $blog->artikel = $request->get('artikel');
+
+        $name = '';
+        if($request->hasfile('filename')){
+
+          if($blog->gambar <> null || $blog->gambar <> ''){
+            $path = public_path() . '/images/'.$blog->gambar;
+            if(File::exists($path)){
+              File::delete($path);
+            }
+          }
+
+          $file = $request->file('filename');
+          $name = time() .'-'. $file->getClientOriginalName();
+          $file->move(public_path() . '/images/', $name);
+        }
+
+        $blog->gambar = $name;
         $blog->update();
+        
         return redirect('admin/blog')
         ->with('success', 'Information has been updated');
     }
@@ -105,6 +125,14 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = Blog::find($id);
+
+        if($blog->gambar <> null || $blog->gambar <> ''){
+          $path = public_path() . '/images/'.$blog->gambar;
+          if(File::exists($path)){
+            File::delete($path);
+          }
+        }
+
         $blog->delete();
         return redirect('admin/blog')
         ->with('success', 'Information has been deleted');
