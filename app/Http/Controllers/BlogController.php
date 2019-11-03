@@ -104,14 +104,16 @@ class BlogController extends Controller
             }
           }
 
+
           $file = $request->file('filename');
           $name = time() .'-'. $file->getClientOriginalName();
           $file->move(public_path() . '/images/', $name);
+          $blog->gambar = $name;
+
         }
 
-        $blog->gambar = $name;
         $blog->update();
-        
+
         return redirect('admin/blog')
         ->with('success', 'Information has been updated');
     }
@@ -125,7 +127,6 @@ class BlogController extends Controller
     public function destroy($id)
     {
         $blog = Blog::find($id);
-
         if($blog->gambar <> null || $blog->gambar <> ''){
           $path = public_path() . '/images/'.$blog->gambar;
           if(File::exists($path)){
