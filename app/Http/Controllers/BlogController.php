@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Blog;
 use Illuminate\Http\Request;
 use File;
+use App\Http\Requests\NewBlogRequest;
+use App\Http\Requests\UpdateBlogRequest;
+
+
 class BlogController extends Controller
 {
     /**
@@ -38,8 +42,9 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewBlogRequest $request)
     {
+        $validated = $request->validated();
         $name = '';
         if($request->hasfile('filename')){
           $file = $request->file('filename');
@@ -47,14 +52,10 @@ class BlogController extends Controller
           $file->move(public_path() . '/images/', $name);
         }
 
-        $blog = new Blog;
-        $blog->judul = $request->get('judul');
-        $blog->artikel = $request->get('artikel');
-        $blog->gambar = $name;
-        $blog->save();
+        $validated['gambar'] = $name;
+        $blog = Blog::create($validated);
 
         return redirect('admin/blog')->with('success', 'Blog berhasil disimpan');
-
     }
 
     /**
@@ -86,14 +87,11 @@ class BlogController extends Controller
      * @param  \App\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateBlogRequest $request, $id)
     {
 
-
+        $validated = $request->validated();
         $blog = Blog::find($id);
-        $blog->judul = $request->get('judul');
-        $blog->artikel = $request->get('artikel');
-
         $name = '';
         if($request->hasfile('filename')){
 
@@ -104,15 +102,13 @@ class BlogController extends Controller
             }
           }
 
-
           $file = $request->file('filename');
           $name = time() .'-'. $file->getClientOriginalName();
           $file->move(public_path() . '/images/', $name);
-          $blog->gambar = $name;
 
         }
-
-        $blog->update();
+        $validated['image'] = $name;
+        $blog->update($validated);
 
         return redirect('admin/blog')
         ->with('success', 'Information has been updated');
