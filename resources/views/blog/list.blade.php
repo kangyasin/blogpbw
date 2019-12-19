@@ -24,6 +24,7 @@
             <tr>
               <th scope="col">#</th>
               <th scope="col">Title</th>
+              <th scope="col">Author</th>
               <th scope="col">Created</th>
               <th scope="col">Image</th>
               <th scope="col" colspan="2">Action</th>
@@ -35,6 +36,7 @@
             <tr>
               <td> {{ $key += 1 }} </td>
               <td> {{ $Blog->judul }} </td>
+              <td> {{ $Blog->user->name }} </td>
               <td> {{ $Blog->created_at }} </td>
               <td>
                     @if($Blog->gambar != '')

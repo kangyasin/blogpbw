@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use File;
 use App\Http\Requests\NewBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
-
+use Illuminate\Support\Facades\Auth;
 
 class BlogController extends Controller
 {
@@ -18,7 +18,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $DataBlogs = Blog::get();
+        $DataBlogs = Blog::with('user:id,name')->get();
         return view('blog/list', compact('DataBlogs'));
     }
 
@@ -44,6 +44,8 @@ class BlogController extends Controller
      */
     public function store(NewBlogRequest $request)
     {
+        $user = Auth::user();
+
         $validated = $request->validated();
         $name = '';
         if($request->hasfile('filename')){
@@ -52,6 +54,7 @@ class BlogController extends Controller
           $file->move(public_path() . '/images/', $name);
         }
 
+        $validated['user_id'] = $user->id;
         $validated['gambar'] = $name;
         $blog = Blog::create($validated);
 
