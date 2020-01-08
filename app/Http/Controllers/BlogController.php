@@ -19,6 +19,7 @@ class BlogController extends Controller
     public function index()
     {
         $DataBlogs = Blog::with('user:id,name')->get();
+        return $DataBlogs;
         return view('blog/list', compact('DataBlogs'));
     }
 
