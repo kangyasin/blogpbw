@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Blog;
+use App\Exports\BlogReport;
 use Illuminate\Http\Request;
 use File;
 use App\Http\Requests\NewBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
 use Illuminate\Support\Facades\Auth;
-
+use Excel;
 class BlogController extends Controller
 {
     /**
@@ -145,6 +146,9 @@ class BlogController extends Controller
     }
 
 
-
+    public function export()
+    {
+        return Excel::download(new BlogReport(), 'users.xlsx');
+    }
 
 }
