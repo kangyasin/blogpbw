@@ -20,7 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function(){
   Route::resource('/admin/blog', 'BlogController');
-    Route::get('/admin/export-blog', 'BlogController@export');
+  Route::get('/admin/export-blog', 'BlogController@export');
   // Route::put('/admin/blog/update', 'BlogController@update');
   // Route::delete('/admin/blog/{id}', 'BlogController@destroy');
   Route::get('/admin/add_blog', 'BlogController@add_blog');
